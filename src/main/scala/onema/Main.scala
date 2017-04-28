@@ -45,7 +45,7 @@ object Main {
     // Get the data or file
     if (data.isDefined) {
       val encryptedData = processData(encrypt, data.get, key, profile)
-      log.info(s"Encrypted data: > \n$encryptedData")
+      log.info(s"Data: > \n$encryptedData")
     } else if (file.isDefined) {
       processFile(encrypt, file.get, key, profile)
     }
