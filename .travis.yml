@@ -5,6 +5,11 @@ language: scala
 scala:
   - 2.12.2
 
+before_script:
+  - add-apt-repository ppa:openjdk-r/ppa
+  - apt-get update
+  - apt-get install openjdk-8-jre
+
 script:
   - ./create_jar.sh
 
