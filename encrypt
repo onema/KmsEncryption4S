@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-java -jar encryption4s.jar $@

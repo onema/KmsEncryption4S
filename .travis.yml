@@ -7,24 +7,22 @@ scala:
 jdk:
   - oraclejdk8
 
-before_install:
-- openssl aes-256-cbc -K $encrypted_ccf4eca6200a_key -iv $encrypted_ccf4eca6200a_iv
-  -in github_deploy_key.enc -out ~\/.ssh/github_deploy_key -d
-
 script:
   - ./create_jar.sh
 
-after_script:
+before_deploy:
   - cat create_executable.sh encryption4s.jar > crypto && chmod +x crypto
-  - echo 'mv crypto /usr/local/bin/ ' > install_crypto.sh && chmod +x install_crypto.sh
-  - zip package.zip crypto install_crypto.sh README.md
+  - echo '#!/usr/bin/env bash
+  mv crypto /usr/local/bin/ ' > install_crypto.sh && chmod +x install_crypto.sh
+  - zip /tmp/package.zip crypto install_crypto.sh README.md
 
 
 deploy:
   provider: releases
+  api_key:
+    secure: uwL8jEnrpHBzV07ILqRLW6s7So1AWvOg76IBwo2MF+rk9oJN0JZvOjl5FqGiZiZ4i/guK0SyyP7A7lF+1mVZVTtwdRpNwt5TCkFc0dMPlp1Uk77RhmIfoE1Ma1XC/NlslMCZVgObYMAEFyviwSfkwW2OlfeVV2dFcv4K9PcJW7hjodstUqbV+yLMja6CkoFyv1qWG8ieA7eByil+No/W797k5/mGj88BNfqun6sYvaCg+jmO7xb5Hchv/rhSpExxVCETVVX+odHyGJz2LxEj5Ygs1bCvoezSnVH2d+ecAK/ZEdgUKdZk5W9fWkscmqX0VNCknONU2/h2Tn7eVrgwy/7shAQy1P4RRbHWT/1idEV4m6P8RHhgWU2QbvzkD9MKvAIaN7wheKdHLHPV12yEqPbg+ZnCKqxf3auFd+BY9bSvzv4LtZFwETAlpGNxpvW45I6qyk8gSB4fzt9m+E5x5ql32N0REip2+3N16bA2YqNJbZcMvuXQ0wrTPr2hZgBfyXqYdR6N88GJ8blUDHVKD7gMPqsJYxEUihzjWWM7xeWyiHexeW49dNWtPMqTpQoweY9J/GVIb3HD8uqNLuoNNVcdQsQqAx3xdbZW1KdZmJcDDaXkIEMpAUMUBuURIxFrox9A5NjUXv4XTGTSh9kFFfTMqz29So7xyQR2wB+sEDU=
   file:
-    - package.zip
-    - crypto
+    - /tmp/package.zip
   on:
     repo: onema/KmsEncryption4S
     tags: true
