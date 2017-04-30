@@ -1,0 +1,27 @@
+# see https://docs.travis-ci.com/user/languages/scala/ for more hints
+language: scala
+
+# list any Scala version you want to test against
+scala:
+  - 2.12
+
+script:
+  - ./create_jar.sh
+
+after_script:
+  - cat create_executable.sh encryption4s.jar > crypto && chmod +x crypto
+  - echo 'mv crypto /usr/local/bin/ ' > install_crypto.sh && chmod +x install_crypto.sh
+  - zip package.zip crypto install_crypto.sh README.md
+
+
+deploy:
+  provider: releases
+  api_key:
+    secure: 4EvjoRkMoXj+sIUB5s4yfLcr0zNInmX9COXaGRgPTw0g7P1qH1j/PR0eOXgOFgln54dRgWH4+l9/2OLVL/x4Qo2ZbTAeT5d8IXDOrLNSCNrtINY2x6XhEoYp17lAIs1OkT1VreuCGu38/eTQ3gd2V4Xm5X+vRBnpF44xnWepgy0TJ091U0kbLs4vymquFL3RHCr3NH8Aa1eE9B/8T5+gF1nDpeegBnJNLPGU8FMre/ldQBv3umRKHnyO3cXs28993USq+FfLqdvR6OhvsNu862ZvAl9GJ+SyClVekvkgGu5EffaHDB0PhrFiFPNzna52fETW9L1kDbrGkZ73xG3mrDyjM1XEn3YFDM/fuoTG6rscGOex+5+tImHiAR7fhzLzx/mkIExNdCRBIYLRMjxKdT7NqhGI7b+iyS4Oz1GQYqeMIkyb6g5QrFr5IVUnWNB3ZI8CEXZbIUP0RV0NY8j2um+DOdUwK9cGzNYS8dSkWA2P9VskiHWpKJpIam/lT8eRaLvChUPjGrRre73I0LzBMZn6z94sPAhCEqMIhjDQX+O+gZ7ew0/pfju2W6K5Oijy2Df4hBCZADqrUsZUAOqetaeHJ3Q29iRQUZjJdmbWWPlXKFBmklmTEhaPYyxX6qvyo16nBqOs6JlJiGtlEPEIkOQ5hqXRj+8sQN1V0SbhXXc=
+  file:
+    - package.zip
+    - crypto
+  on:
+    repo: onema/KmsEncryption4S
+    tags: true
+    all_branches: true
