@@ -1,31 +1,23 @@
-# see https://docs.travis-ci.com/user/languages/scala/ for more hints
 language: scala
-
-# list any Scala version you want to test against
 scala:
-  - 2.12.2
+- 2.12.2
 jdk:
-  - oraclejdk8
-
-before_install:
-- openssl aes-256-cbc -K $encrypted_ccf4eca6200a_key -iv $encrypted_ccf4eca6200a_iv
-  -in github_deploy_key.enc -out ~\/.ssh/github_deploy_key -d
-
+- oraclejdk8
 script:
-  - ./create_jar.sh
-
+- "./create_jar.sh"
 after_script:
-  - cat create_executable.sh encryption4s.jar > crypto && chmod +x crypto
-  - echo 'mv crypto /usr/local/bin/ ' > install_crypto.sh && chmod +x install_crypto.sh
-  - zip package.zip crypto install_crypto.sh README.md
-
-
+- cat create_executable.sh encryption4s.jar > crypto && chmod +x crypto
+- echo 'mv crypto /usr/local/bin/ ' > install_crypto.sh && chmod +x install_crypto.sh
+- zip package.zip crypto install_crypto.sh README.md
 deploy:
   provider: releases
   file:
-    - package.zip
-    - crypto
+  - package.zip
+  - crypto
   on:
     repo: onema/KmsEncryption4S
     tags: true
     all_branches: true
+before_install:
+- openssl aes-256-cbc -K $encrypted_ccf4eca6200a_key -iv $encrypted_ccf4eca6200a_iv
+  -in github_deploy_key.enc -out ~\/.ssh/github_deploy_key -d
