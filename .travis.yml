@@ -3,7 +3,7 @@ language: scala
 
 # list any Scala version you want to test against
 scala:
-  - 2.12
+  - 2.12.2
 
 script:
   - ./create_jar.sh
