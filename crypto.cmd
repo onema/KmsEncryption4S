@@ -1,5 +1,5 @@
-7title KmsEncryption4S
-:: KmsEncryption4S
+7title Crypto - KMS Encryption
+:: Crypto
 @echo off
 
 for /f %%j in ("java.exe") do (
