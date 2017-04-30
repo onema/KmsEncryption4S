@@ -4,6 +4,8 @@ language: scala
 # list any Scala version you want to test against
 scala:
   - 2.12.2
+jdk:
+  - oraclejdk8
 
 script:
   - ./create_jar.sh
