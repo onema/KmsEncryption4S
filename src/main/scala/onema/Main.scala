@@ -18,43 +18,39 @@ import com.amazonaws.encryptionsdk.{AwsCrypto, MasterKeyProvider}
 import com.amazonaws.encryptionsdk.kms.{KmsMasterKey, KmsMasterKeyProvider}
 import com.amazonaws.regions._
 import com.typesafe.scalalogging.Logger
+import onema.Command.CommandArguments
 
 import scala.io.Source
 
 object Main {
 
   // --- Fields ---
-  val log = Logger("KmsEncryption4S")
+  val log = Logger("crypto")
+  private var arguments: CommandArguments = _
 
   def main(args: Array[String]): Unit = {
-
     val startTime = System.nanoTime()
-    val command = new Command
-    val cli = command.getParser(args)
-    val key = cli.getOptionValue("key")
-    val data = Option[String](cli.getOptionValue("data"))
-    val file = Option[String](cli.getOptionValue("file"))
-    val encrypt =cli.hasOption("encrypt")
-    val decrypt = cli.hasOption("decrypt")
-    val profile = Option[String](cli.getOptionValue("profile")).getOrElse("default")
-
-    // Validate encrypt and decrypt values
-    if (encrypt && decrypt) throw new IllegalArgumentException("Either encrypt or decrypt values are required.")
-    if (data.isEmpty && file.isEmpty) throw new IllegalArgumentException("You must define data or a file to encrypt/decrypt")
+    try {
+      val command = new Command
+      arguments = command.parse(args)
+    } catch {
+      case _: Exception =>
+        System.exit(1)
+    }
 
     // Get the data or file
-    if (data.isDefined) {
-      val encryptedData = processData(encrypt, data.get, key, profile)
-      log.info(s"Data: > \n$encryptedData")
-    } else if (file.isDefined) {
-      processFile(encrypt, file.get, key, profile)
+    if (arguments.data.isDefined) {
+      val encryptedData = processData(arguments.encrypt, arguments.data.get, arguments.key, arguments.profile)
+      println(s"Data: > \n$encryptedData")
+    } else if (arguments.file.isDefined) {
+      processFile(arguments.encrypt, arguments.file.get, arguments.key, arguments.profile)
     }
     log.info(s"TIME ELAPSED: " + (System.nanoTime() - startTime).toDouble/1000000000 + " s")
   }
 
   // --- Methods ---
   private def processFile(encrypt: Boolean, file: String, key: String, profile: String) = {
-    log.info(s"Processing fiel $file")
+    log.info(s"Processing file $file")
     val extension = if (encrypt) ".enc" else ".dec"
     val cannonicalPath = new File(file).getAbsolutePath
     val data = Source.fromFile(cannonicalPath).mkString
@@ -63,6 +59,7 @@ object Main {
     val bufferedWriter = new BufferedWriter(new FileWriter(newFile))
     bufferedWriter.write(encryptedData)
     bufferedWriter.close()
+    log.info(s"File saved to: ${cannonicalPath + extension}")
   }
 
   private def processData(encrypt: Boolean, data: String, key: String, profile: String): String = {
@@ -95,7 +92,6 @@ object Main {
     // Get credentials and region from profile
     val region = new AwsProfileRegionProvider(profile).getRegion
     val credentialsProvider = new ProfileCredentialsProvider(profile)
-
     val provider = new KmsMasterKeyProvider(credentialsProvider, alias)
     provider.setRegion(RegionUtils.getRegion(region))
     provider
