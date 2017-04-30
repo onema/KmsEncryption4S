@@ -12,7 +12,8 @@ script:
 
 before_deploy:
   - cat create_executable.sh encryption4s.jar > crypto && chmod +x crypto
-  - echo 'mv crypto /usr/local/bin/ ' > install_crypto.sh && chmod +x install_crypto.sh
+  - echo '#!/usr/bin/env bash
+  mv crypto /usr/local/bin/ ' > install_crypto.sh && chmod +x install_crypto.sh
   - zip /tmp/package.zip crypto install_crypto.sh README.md
 
 
