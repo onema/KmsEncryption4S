@@ -8,6 +8,9 @@ Requirements
 - Java 8
 - SBT 0.13
 - [Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
+    - Paste the contents of the `jrce_policy-8` (the `local_policy.jar` and the `US_export_policy.jar`) to the following directory: 
+      - Mac OSX: `/Library/Java/JavaVirtualMachines/<jdk_version>/Contents/Home/jre/lib/security`
+      - Windows: `C:\Program Files (x86)\Java\<jdk_version>\lib\security`
 
 Instal
 ------
