@@ -1,4 +1,4 @@
-7title Crypto - KMS Encryption
+title Crypto - KMS Encryption
 :: Crypto
 @echo off
 

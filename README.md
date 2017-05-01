@@ -1,5 +1,9 @@
 KmsEncryption4S
 ================
+[![Build Status](https://travis-ci.org/onema/KmsEncryption4S.svg?branch=master)](https://travis-ci.org/onema/KmsEncryption4S)
+
+Summary
+--------
 Tool to encrypt and decrypt files and strings using AWS KMS Data Keys.
 
 Requirements
