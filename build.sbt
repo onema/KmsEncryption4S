@@ -9,7 +9,7 @@ libraryDependencies ++= {
 
     // KMS SDK
     "com.amazonaws"              % "aws-java-sdk-kms"         % "1.11.122",
-    "com.amazonaws"              % "aws-encryption-sdk-java"  % "0.0.1",
+    "com.amazonaws"              % "aws-encryption-sdk-java"  % "1.3.1",
 
     // Dependencies
     "org.bouncycastle"           % "bcprov-ext-jdk15on"       % "1.54",
